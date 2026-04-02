@@ -36,17 +36,18 @@ pipeline {
         stage('Account Service Scan') {
             steps {
                 dir('account-service') {
-                  withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_AUTH_TOKEN')]) {
-                    sh '''
-                    docker run --rm \
-                    --network $DOCKER_NETWORK \
-                    -v $(pwd):/usr/src \
-                    sonarsource/sonar-scanner-cli \
-                    -Dsonar.projectKey=account-service \
-                    -Dsonar.sources=. \
-                    -Dsonar.host.url=$SONAR_URL \
-                    -Dsonar.token=$SONAR_AUTH_TOKEN
-                    '''
+                    withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_AUTH_TOKEN')]) {
+                        sh '''
+                        docker run --rm \
+                        --network $DOCKER_NETWORK \
+                        -v $(pwd):/usr/src \
+                        sonarsource/sonar-scanner-cli \
+                        -Dsonar.projectKey=account-service \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=$SONAR_URL \
+                        -Dsonar.token=$SONAR_AUTH_TOKEN
+                        '''
+                    }
                 }
             }
         }
@@ -54,17 +55,18 @@ pipeline {
         stage('Transaction Service Scan') {
             steps {
                 dir('transaction-service') {
-                  withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_AUTH_TOKEN')]) {
-                    sh '''
-                    docker run --rm \
-                    --network $DOCKER_NETWORK \
-                    -v $(pwd):/usr/src \
-                    sonarsource/sonar-scanner-cli \
-                    -Dsonar.projectKey=transaction-service \
-                    -Dsonar.sources=. \
-                    -Dsonar.host.url=$SONAR_URL \
-                    -Dsonar.token=$SONAR_AUTH_TOKEN
-                    '''
+                    withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_AUTH_TOKEN')]) {
+                        sh '''
+                        docker run --rm \
+                        --network $DOCKER_NETWORK \
+                        -v $(pwd):/usr/src \
+                        sonarsource/sonar-scanner-cli \
+                        -Dsonar.projectKey=transaction-service \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=$SONAR_URL \
+                        -Dsonar.token=$SONAR_AUTH_TOKEN
+                        '''
+                    }
                 }
             }
         }
