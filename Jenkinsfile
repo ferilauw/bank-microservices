@@ -38,6 +38,18 @@ pipeline {
                 dir('account-service') {
                     withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_AUTH_TOKEN')]) {
                         sh '''
+                        echo "=== RUN FLYWAY ACCOUNT ==="
+
+                        echo "=== LOCAL FILE ==="
+                        ls -la db/migration
+            
+                        echo "=== INSIDE CONTAINER ==="
+                        docker run --rm \
+                        --network $DOCKER_NETWORK \
+                        -v $PWD/db/migration:/flyway/sql \
+                        busybox \
+                        ls -la /flyway/sql
+                        
                         docker run --rm \
                         --network $DOCKER_NETWORK \
                         -v $(pwd):/usr/src \
@@ -79,7 +91,7 @@ pipeline {
 
                     docker run --rm \
                     --network $DOCKER_NETWORK \
-                    -v $PWD/db/migration:/flyway/sql \
+                    -v /d/sonarjenkins_proj/bank-microservices/account-service/db/migration:/flyway/sql \
                     flyway/flyway \
                     -url=$DB_URL \
                     -user=$DB_USER \
@@ -94,11 +106,22 @@ pipeline {
             steps {
                 dir('transaction-service') {
                     sh '''
+                    docker run --rm \
+                    --network $DOCKER_NETWORK \
+                    -v /d/sonarjenkins_proj/bank-microservices/transaction-service/db/migration:/flyway/sql \
+                    flyway/flyway \
+                    -url=$DB_URL \
+                    -user=$DB_USER \
+                    -password=$DB_PASS \
+                    repair
+                    '''
+                    
+                    sh '''
                     echo "=== RUN FLYWAY TRANSACTION ==="
 
                     docker run --rm \
                     --network $DOCKER_NETWORK \
-                    -v $PWD/db/migration:/flyway/sql \
+                    -v /d/sonarjenkins_proj/bank-microservices/transaction-service/db/migration:/flyway/sql \
                     flyway/flyway \
                     -url=$DB_URL \
                     -user=$DB_USER \
