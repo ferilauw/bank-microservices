@@ -13,7 +13,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/rhezatesar/bank-microservices.git'
+                    url: 'https://github.com/ferilauw/bank-microservices.git'
             }
         }
 
