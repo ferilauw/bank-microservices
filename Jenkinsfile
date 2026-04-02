@@ -91,11 +91,12 @@ pipeline {
 
                     docker run --rm \
                     --network $DOCKER_NETWORK \
-                    -v /d/sonarjenkins_proj/bank-microservices/account-service/db/migration:/flyway/sql \
+                    --volumes-from jenkins \
                     flyway/flyway \
                     -url=$DB_URL \
                     -user=$DB_USER \
                     -password=$DB_PASS \
+                    -locations=filesystem:$WORKSPACE/account-service/db/migration \
                     migrate
                     '''
                 }
@@ -108,11 +109,12 @@ pipeline {
                     sh '''
                     docker run --rm \
                     --network $DOCKER_NETWORK \
-                    -v /d/sonarjenkins_proj/bank-microservices/transaction-service/db/migration:/flyway/sql \
+                    --volumes-from jenkins \
                     flyway/flyway \
                     -url=$DB_URL \
                     -user=$DB_USER \
                     -password=$DB_PASS \
+                    -locations=filesystem:$WORKSPACE/transaction-service/db/migration \
                     repair
                     '''
                     
@@ -121,11 +123,12 @@ pipeline {
 
                     docker run --rm \
                     --network $DOCKER_NETWORK \
-                    -v /d/sonarjenkins_proj/bank-microservices/transaction-service/db/migration:/flyway/sql \
+                    --volumes-from jenkins \
                     flyway/flyway \
                     -url=$DB_URL \
                     -user=$DB_USER \
                     -password=$DB_PASS \
+                    -locations=filesystem:$WORKSPACE/transaction-service/db/migration \
                     migrate
                     '''
                 }
