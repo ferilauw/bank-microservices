@@ -77,7 +77,6 @@ pipeline {
                     sh '''
                     echo "=== RUN FLYWAY ACCOUNT ==="
 
-                    sh '''
                     docker run --rm \
                     --network $DOCKER_NETWORK \
                     -v $PWD/db/migration:/flyway/sql \
@@ -97,7 +96,6 @@ pipeline {
                     sh '''
                     echo "=== RUN FLYWAY TRANSACTION ==="
 
-                    sh '''
                     docker run --rm \
                     --network $DOCKER_NETWORK \
                     -v $PWD/db/migration:/flyway/sql \
